@@ -1,3 +1,4 @@
+namespace DPS.Models;
 public class User
 {
     private string _username;

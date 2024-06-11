@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace DPS.Models;
 public class Sweet
 {
     private Guid _id;
@@ -8,7 +9,7 @@ public class Sweet
     private DateTime _date;
     private int _quantity;
     private IEnumerable<string> _ingredients;
-    
+
 
     [Required]
     public Guid ID { get => _id; set => _id = value; }
