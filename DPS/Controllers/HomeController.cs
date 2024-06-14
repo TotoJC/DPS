@@ -59,6 +59,16 @@ public class HomeController : Controller
  
         return Json(sweets);
     }
+    [HttpGet]
+    public JsonResult GetSweetById(string id)
+    {
+        HttpResponseMessage response = httpClient.GetAsync("dolci/" + id).Result;
+        dolci sweets = new dolci();  
+        string data = response.Content.ReadAsStringAsync().Result;
+        sweets = JsonSerializer.Deserialize<dolci>(data); 
+ 
+        return Json(sweets);
+    }
 
     [HttpPost]
     public JsonResult CreateSweet(dolci sweet)
