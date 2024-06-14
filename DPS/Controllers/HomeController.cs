@@ -19,14 +19,62 @@ public class HomeController : Controller
     }
 
     public IActionResult Index()
-    {
-        HttpResponseMessage response = httpClient.GetAsync("dolci/18375ceb-79b3-4526-91bd-6637ecc4004d").Result;
-        Sweet sweet = new Sweet();
-        string data = response.Content.ReadAsStringAsync().Result;
-        dolci dolci = JsonSerializer.Deserialize<dolci>(data);
-        sweet.ID = dolci.id;
-        return View(sweet);
+    {  
+        return View();
     } 
+
+
+    public IActionResult Home()
+    {
+        HttpResponseMessage response = httpClient.GetAsync("dolci").Result;
+        List<dolci> sweets = new List<dolci>(); 
+        List<DPS.Models.Sweet> result = new List<DPS.Models.Sweet>(); 
+        string data = response.Content.ReadAsStringAsync().Result;
+        sweets = JsonSerializer.Deserialize<List<dolci>>(data); 
+
+        foreach (dolci item in sweets)
+        {
+            Sweet sweet = new Sweet();
+            sweet.ID = item.id;
+            sweet.Name = item.nome;
+            sweet.Quantity = item.quantita;
+            sweet.Price = item.prezzo;
+            result.Add(sweet);
+        }
+        return View(result);
+    }
+    
+    public IActionResult SweetView()
+    { 
+        return View();
+    } 
+
+    [HttpGet]
+    public JsonResult GetSweet()
+    {
+        HttpResponseMessage response = httpClient.GetAsync("dolci").Result;
+        List<dolci> sweets = new List<dolci>();  
+        string data = response.Content.ReadAsStringAsync().Result;
+        sweets = JsonSerializer.Deserialize<List<dolci>>(data); 
+ 
+        return Json(sweets);
+    }
+
+    [HttpPost]
+    public JsonResult CreateSweet(dolci sweet)
+    {  
+        var json = JsonSerializer.Serialize<dolci>(sweet);
+        var content = new StringContent(json.ToString(), System.Text.Encoding.UTF8, "application/json");
+        HttpResponseMessage response = httpClient.PostAsync("dolci", content).Result; 
+        
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            return Json("Saved");
+        }
+ 
+        return Json(response.StatusCode);
+    }
+
 
     public IActionResult Privacy()
     {
@@ -38,4 +86,4 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-}
+} 

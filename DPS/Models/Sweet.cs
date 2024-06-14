@@ -7,7 +7,7 @@ public class Sweet
     private string _name;
     private decimal _price;
     private DateTime _date;
-    private int _quantity;
+    private decimal _quantity;
     private IEnumerable<string> _ingredients;
 
 
@@ -25,7 +25,7 @@ public class Sweet
     public DateTime Date { get => _date; set => _date = value; }
 
     [Required]
-    public int Quantity { get => _quantity; set => _quantity = value; } 
+    public decimal Quantity { get => _quantity; set => _quantity = value; } 
 
     public IEnumerable<string> Ingredients { get => _ingredients; set => _ingredients = value; }
 }

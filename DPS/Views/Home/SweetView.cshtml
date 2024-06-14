@@ -1,0 +1,61 @@
+@model DPS.Models.dolci;
+<button type="button" class="btn btn-primary" style="position:relative;float: right;top: 15px;left: -5px;" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Sweet</button>
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr class="bg-black text-light">
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+    </tr>
+  </thead>
+  <tbody id="tblBody">
+     
+  </tbody>   
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Detail</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body"> 
+        <div class="mb-2">
+          <label asp-for="id"></label>
+          <input type="text" asp-for="id" placeholder="ID" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label asp-for="nome"></label>
+          <input type="text" asp-for="nome" placeholder="Name" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label asp-for="prezzo"></label>
+          <input type="number" asp-for="prezzo" placeholder="Price" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label asp-for="quantita"></label>
+          <input type="number" asp-for="quantita" placeholder="Quantity" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label asp-for="data"></label>
+          <input type="date" asp-for="data" placeholder="Date" class="form-control">
+        </div> 
+        <div class="mb-2">
+          <label asp-for="ConcatIngredients"></label>
+          <input type="text" asp-for="ConcatIngredients" placeholder="ingredient1;ingredient2;..." class="form-control">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" id="btnSave" class="btn btn-primary" onclick="saveSweet()">Save</button>
+        <button type="submit" id="btnUpdate" class="btn btn btn-warning" onclick="updateSweet()">Update</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>  
+</script>
