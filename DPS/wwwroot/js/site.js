@@ -25,7 +25,8 @@ function GetProduct() {
                 result += '<th>' + element.quantita + '</th>';
                 result += '<td class="text-center py-1"> <button type="button"'
                 result += `onclick='edit(this.id)'`;
-                result+= 'class="btn btn-outline-primary btn-xs open-AddBookDialog" id="'+ element.id +'" data-bs-toggle="modal" data-bs-target="#exampleModal" asp-action="Edit" asp-route-id="'+ element.id +'"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info" viewBox="0 0 16 16"> <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></button></td>';
+                result += 'class="btn btn-outline-primary btn-xs open-AddBookDialog" id="'+ element.id +'" data-bs-toggle="modal" data-bs-target="#exampleModal" asp-action="Edit" asp-route-id="'+ element.id +'"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info" viewBox="0 0 16 16"> <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></button></td>';
+                
                 result += '</tr>';
                 i++;
             });
@@ -83,35 +84,39 @@ function saveSweet() {
 }
 
 function edit(id) { 
-  var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://localhost:3000/dolci/"+ id);
-      
-        clean('loading');
+  document.getElementById('btnSave').style.display = 'none'; 
+  document.getElementById('btnUpdate').style.display = 'block'; 
+  document.getElementById('btnDelete').style.display = 'block'; 
 
-        xhr.onload = function() {
-          if (xhr.status === 200) {
-            var sweet = JSON.parse(xhr.responseText);
-            document.getElementById('id').value = sweet.id;
-            document.getElementById('nome').value = sweet.nome;
-            document.getElementById('prezzo').value = sweet.prezzo;
-            document.getElementById('quantita').value = sweet.quantita;
-            document.getElementById('data').value = sweet.data;
-            if(sweet.ingredienti != null && sweet.ingredienti.length > 0){
-              document.getElementById('ConcatIngredients').value = sweet.ingredienti.join(';');
-            }
-            else {
-              document.getElementById('ConcatIngredients').value = '';
-            } 
-          } else {
-            console.error("Errore durante la chiamata:", xhr.statusText);
-          }
-        };
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost:3000/dolci/"+ id);
       
-        xhr.onerror = function() {
-          console.error("Errore di rete");
-        };
+  clean('loading');
+
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var sweet = JSON.parse(xhr.responseText);
+      document.getElementById('id').value = sweet.id;
+      document.getElementById('nome').value = sweet.nome;
+      document.getElementById('prezzo').value = sweet.prezzo;
+      document.getElementById('quantita').value = sweet.quantita;
+      document.getElementById('data').value = sweet.data;
+      if(sweet.ingredienti != null && sweet.ingredienti.length > 0){
+        document.getElementById('ConcatIngredients').value = sweet.ingredienti.join(';');
+      }
+      else {
+        document.getElementById('ConcatIngredients').value = '';
+      } 
+    } else {
+      console.error("Errore durante la chiamata:", xhr.statusText);
+    }
+  };
       
-        xhr.send(id); 
+  xhr.onerror = function() {
+    console.error("Errore di rete");
+  };
+      
+  xhr.send(id); 
 }
 
 function cleanForm() {
@@ -127,17 +132,34 @@ function clean(message) {
   document.getElementById('quantita').value = 0;
   document.getElementById('ConcatIngredients').value = message;
 }
-
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-    .replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0, 
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
+ 
 
 function setupForm() {
-  cleanForm();
-  document.getElementById('id').value = uuidv4();
+  cleanForm(); 
+  document.getElementById('btnSave').style.display = 'block'; 
+  document.getElementById('btnUpdate').style.display = 'none'; 
+  document.getElementById('btnDelete').style.display = 'none'; 
+
+  
+}
+
+function deleteSweet() {
+  var id = document.getElementById('id').value;
+  var xhr = new XMLHttpRequest();
+  xhr.open("DELETE", "http://localhost:3000/dolci/"+ id);
+       
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      alert('Deleted!');
+      location.reload();
+    } else {
+      console.error("Errore durante la chiamata:", xhr.statusText);
+    }
+  };
+      
+  xhr.onerror = function() {
+    console.error("Errore di rete");
+  };
+      
+  xhr.send(); 
 }

@@ -73,6 +73,7 @@ public class HomeController : Controller
     [HttpPost]
     public JsonResult CreateSweet(dolci sweet)
     {  
+        sweet.id = Guid.NewGuid();
         var json = JsonSerializer.Serialize<dolci>(sweet);
         var content = new StringContent(json.ToString(), System.Text.Encoding.UTF8, "application/json");
         HttpResponseMessage response = httpClient.PostAsync("dolci", content).Result; 
