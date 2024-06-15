@@ -25,23 +25,8 @@ public class HomeController : Controller
 
 
     public IActionResult Home()
-    {
-        HttpResponseMessage response = httpClient.GetAsync("dolci").Result;
-        List<dolci> sweets = new List<dolci>(); 
-        List<DPS.Models.Sweet> result = new List<DPS.Models.Sweet>(); 
-        string data = response.Content.ReadAsStringAsync().Result;
-        sweets = JsonSerializer.Deserialize<List<dolci>>(data); 
-
-        foreach (dolci item in sweets)
-        {
-            Sweet sweet = new Sweet();
-            sweet.ID = item.id;
-            sweet.Name = item.nome;
-            sweet.Quantity = item.quantita;
-            sweet.Price = item.prezzo;
-            result.Add(sweet);
-        }
-        return View(result);
+    { 
+        return View();
     }
     
     public IActionResult SweetView()
