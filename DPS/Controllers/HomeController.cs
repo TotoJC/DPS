@@ -12,7 +12,7 @@ public class HomeController : Controller
     private readonly HttpClient httpClient;
 
     public HomeController(ILogger<HomeController> logger)
-    {
+    {  
         _logger = logger;
         httpClient = new HttpClient();
         httpClient.BaseAddress = baseAddress;
@@ -53,6 +53,7 @@ public class HomeController : Controller
  
         return Json(sweets);
     }
+    
     [HttpGet]
     public JsonResult GetSweetById(string id)
     {

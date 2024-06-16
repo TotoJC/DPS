@@ -46,7 +46,7 @@
         formData.append('quantita', formObj.quantita); 
 
         var xhr = new XMLHttpRequest();
-        xhr.open('PUT', 'http://localhost:5154/Home/BuySweetById');
+        xhr.open('PUT', localhp + '/Home/BuySweetById');
         xhr.onload = function() {
             if (xhr.status === 200) {
                 var sweet = JSON.parse(xhr.responseText);   
@@ -67,14 +67,32 @@
         formData.append('id', formObj.id); 
 
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:5154/Home/GetSweetById/' + formObj.id);
+        xhr.open('GET', localhp + '/Home/GetSweetById/' + formObj.id);
         xhr.onload = function() {
             if (xhr.status === 200) {
                 var sweet = JSON.parse(xhr.responseText);  
-                var d = sweet.data;
-                console.log(d);
+                const d = new Date(sweet.data); 
+                const date = new Date();
+                const millisecondsDiff = d.getTime() - date.getTime();
+                const daysDiff = millisecondsDiff / (1000 * 60 * 60 * 24);
 
-                document.getElementById('Price').value = sweet.prezzo;
+                var p = 0;
+                switch(true) {
+                    case daysDiff < 1:
+                        p = sweet.prezzo;
+                        break;
+                    case daysDiff <= 2:
+                        p = sweet.prezzo - ((sweet.prezzo * 20) / 100);
+                        break;
+                    case daysDiff <= 3:
+                        p = sweet.prezzo - ((sweet.prezzo * 80) / 100);
+                        break; 
+                    case daysDiff > 0:
+                        p = -1;
+                        break;
+                } 
+
+                document.getElementById('Price').value = p;
                 document.getElementById('Quantity').value = sweet.quantita;
             } else {
             alert('Error:', xhr.statusText);
