@@ -27,6 +27,15 @@ public class HomeController : Controller
     public IActionResult Home()
     { 
         return View();
+    } 
+    
+    public IActionResult Buy()
+    { 
+        HttpResponseMessage response = httpClient.GetAsync("dolci").Result;
+        List<dolci> sweets = new List<dolci>();  
+        string data = response.Content.ReadAsStringAsync().Result;
+        sweets = JsonSerializer.Deserialize<List<dolci>>(data); 
+        return View(sweets);
     }
     
     public IActionResult SweetView()
@@ -55,6 +64,17 @@ public class HomeController : Controller
         return Json(sweets);
     }
 
+    [HttpPut]
+    public JsonResult BuySweetById(BuySweet buySweet)
+    { 
+        var json = JsonSerializer.Serialize<BuySweet>(buySweet);
+        var content = new StringContent(json.ToString(), System.Text.Encoding.UTF8, "application/json");
+        HttpResponseMessage response = httpClient.PatchAsync("dolci/" + buySweet.id.ToString(), content).Result; 
+        string data = response.Content.ReadAsStringAsync().Result;  
+ 
+        return Json("Done");
+    }
+
     [HttpPost]
     public JsonResult CreateSweet(dolci sweet)
     {  
@@ -66,6 +86,21 @@ public class HomeController : Controller
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
             return Json("Saved");
+        }
+ 
+        return Json(response.StatusCode);
+    }
+
+    [HttpPut]
+    public JsonResult UpdateSweet(dolci sweet)
+    {   
+        var json = JsonSerializer.Serialize<dolci>(sweet);
+        var content = new StringContent(json.ToString(), System.Text.Encoding.UTF8, "application/json");
+        HttpResponseMessage response = httpClient.PatchAsync("dolci/" + sweet.id.ToString(), content).Result; 
+        
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            return Json("Updated");
         }
  
         return Json(response.StatusCode);
@@ -83,3 +118,4 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 } 
+
